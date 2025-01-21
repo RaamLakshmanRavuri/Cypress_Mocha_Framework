@@ -2,8 +2,8 @@ name: Run Cypress Tests
 
 on:
   workflow_dispatch: # Allows manual triggering of the workflow
-  schedule:          # Runs the 2nd method (test) every 2 minutes if configured
-    - cron: '*/2 * * * *' # Adjust for your requirement; GitHub Actions has a minimum interval of 5 minutes
+  schedule:          # Runs every 5 minutes
+    - cron: '*/5 * * * *'
 
 jobs:
   cypress-tests:
@@ -18,7 +18,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 18 # Use the Node.js version compatible with your project
+          node-version: 18
 
       # Step 3: Install dependencies
       - name: Install dependencies
@@ -26,11 +26,10 @@ jobs:
 
       # Step 4: Run the first Cypress test
       - name: Run "Launch the Application" test
+        id: first_test
         run: npx cypress run --spec "cypress/e2e/Tooltip_Latest_Code.cy.js" --env onlyFirstTest=true
 
-      # Step 5: Conditional logic to retry the second test
-      - name: Run "Filter Records" test if the first succeeds
-        run: |
-          if [ $? -eq 0 ]; then
-            npx cypress run --spec "cypress/e2e/Tooltip_Latest_Code.cy.js" --env onlySecondTest=true || exit 1
-          fi
+      # Step 5: Run the second Cypress test if the first succeeds
+      - name: Run "Filter Records" test
+        if: success() # This ensures the step runs only if the previous step succeeded
+        run: npx cypress run --spec "cypress/e2e/Tooltip_Latest_Code.cy.js" --env onlySecondTest=true
