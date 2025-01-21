@@ -1,0 +1,20 @@
+{
+  "name": "cypress_mocha_framework",
+  "version": "1.0.0",
+  "description": "Cypress Mocha Framework",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "jenkinTest": "npm cypress run --spec 'cypress/e2e/Tooltip_Latest_Code.cy.js'"
+  },
+  "author": "RAAM LAKSHMAN RAVURI",
+  "license": "ISC",
+  "devDependencies": {
+    "cypress": "^13.9.0",
+    "cypress-xpath": "^2.0.1"
+  },
+  "dependencies": {
+    "crypto-js": "^4.2.0",
+    "sqlite3": "^5.1.7"
+  }
+}
