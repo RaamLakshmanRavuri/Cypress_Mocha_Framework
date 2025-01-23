@@ -5,13 +5,15 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "jenkinTest": "npm cypress run --spec 'cypress/e2e/Tooltip_Latest_Code.cy.js --headed'"
+    "jenkinTest": "npm cypress run --spec 'cypress/e2e/Tooltip_Latest_Code.cy.js --headed'",
+    "start": "http-server . -p 8000"
   },
   "author": "RAAM LAKSHMAN RAVURI",
   "license": "ISC",
   "devDependencies": {
     "cypress": "^13.9.0",
-    "cypress-xpath": "^2.0.1"
+    "cypress-xpath": "^2.0.1",
+    "http-server": "^14.1.1"
   },
   "dependencies": {
     "crypto-js": "^4.2.0",

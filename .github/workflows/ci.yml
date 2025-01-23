@@ -22,15 +22,13 @@ jobs:
         run: npm install
 
       - name: Start the server
-        run: |
-          npm install -g http-server
-          http-server ./your-app-folder -p 8000 &
+        run: npm start &
         env:
           CI: true
 
       - name: Run Cypress tests
         uses: cypress-io/github-action@v5
         with:
-          start: npm start
           wait-on: http://localhost:8000
+          spec: cypress/e2e/Tooltip_Latest_Code.cy.js
           browser: chrome
