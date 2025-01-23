@@ -2,8 +2,8 @@ name: Run Cypress Tests
 
 on:
   workflow_dispatch: # Allows manual triggering of the workflow
-  schedule:          # Runs every 5 minutes
-    - cron: '*/5 * * * *'
+  schedule:          # Runs every 2 minutes
+    - cron: '*/2 * * * *'
 
 jobs:
   cypress-tests:
@@ -27,9 +27,13 @@ jobs:
       # Step 4: Run the first Cypress test
       - name: Run "Launch the Application" test
         id: first_test
-        run: npx cypress run --spec "cypress/e2e/Tooltip_Latest_Code.cy.js" --env onlyFirstTest=true
+        env:
+          TERM: xterm # Ensure terminal type is set
+        run: npx cypress run --headless --browser electron --spec "cypress/e2e/Tooltip_Latest_Code.cy.js" --env onlyFirstTest=true
 
       # Step 5: Run the second Cypress test if the first succeeds
       - name: Run "Filter Records" test
-        if: success() # This ensures the step runs only if the previous step succeeded
-        run: npx cypress run --spec "cypress/e2e/Tooltip_Latest_Code.cy.js" --env onlySecondTest=true
+        if: steps.first_test.outcome == 'success' # Runs only if the first test succeeds
+        env:
+          TERM: xterm # Ensure terminal type is set
+        run: npx cypress run --headless --browser electron --spec "cypress/e2e/Tooltip_Latest_Code.cy.js" --env onlySecondTest=true

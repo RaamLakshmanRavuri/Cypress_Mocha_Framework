@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "jenkinTest": "npm cypress run --spec 'cypress/e2e/Tooltip_Latest_Code.cy.js'"
+    "jenkinTest": "npm cypress run --spec 'cypress/e2e/Tooltip_Latest_Code.cy.js --headed'"
   },
   "author": "RAAM LAKSHMAN RAVURI",
   "license": "ISC",
