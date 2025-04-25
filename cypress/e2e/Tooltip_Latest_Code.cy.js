@@ -17,7 +17,9 @@ describe('Filter and Validate Records with Polling', () => {
 
   it('Launch the Application', () => {
     // Visit the application page
-    cy.visit('http://localhost:8000/Filter_HTML_Page.html');
+    //cy.visit('http://localhost:8000/Filter_HTML_Page.html');
+    cy.visit('subdirectory/Filter_HTML_Page.html');
+
     cy.wait(5000); // Wait for page load
 
     // Step 1: Click the Filter button
