@@ -1,25 +1,25 @@
-name: Run Cypress Test Every 10 Minutes with Electron & Mocha Report
+name: Run Cypress Test Every 10 Minutes
 
 on:
   schedule:
-    - cron: '*/10 * * * *'
-  workflow_dispatch:
+    - cron: '*/10 * * * *' # Runs every 10 minutes
+  workflow_dispatch:       # Allows manual trigger from GitHub UI
 
 jobs:
   cypress-run:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Clone repository manually
-        run: git clone https://github.com/RaamLakshmanRavuri/Cypress_Mocha_Framework.git
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-      - name: Install Node.js
-        run: |
-          curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash -
-          sudo apt-get install -y nodejs
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
 
       - name: Install dependencies
         run: npm install
 
-      - name: Run Cypress test in Electron with mochawesome
-        run: npx cypress run --spec "cypress/e2e/Nested_Frames_Handling.cy.js" --browser electron --headed 
+      - name: Run specific Cypress test in Electron (headed mode)
+        run: npx cypress run --spec "cypress/e2e/Nested_Frames_Handling.cy.js" --browser electron --headed
