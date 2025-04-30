@@ -53,7 +53,7 @@ on:
   schedule:
     - cron: '*/10 * * * *'  # Runs every 10 minutes
   workflow_dispatch:
-    
+
 jobs:
   cypress-run:
     runs-on: ubuntu-latest
@@ -71,7 +71,7 @@ jobs:
         uses: cypress-io/github-action@v5
         with:
           install-command: npm ci
-          browser: electron
+          browser: chrome
           headed: true
           spec: cypress/e2e/Nested_Frames_Handling.cy.js
           config: video=true,screenshotsFolder=cypress/screenshots,videoFolder=cypress/videos
