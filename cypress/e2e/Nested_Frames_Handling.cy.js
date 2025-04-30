@@ -24,13 +24,17 @@ describe('Handle the Nested Frames in Cypress', () => {
         //Perform the Click Action from Parent Frame inside Body
         cy.wrap(iframeBody).find('button').contains('Click Here').click(); 
         cy.wait(3000);
+        cy.screenshot('Parent_Frame_Clicked.png', { capture: 'viewport' });
         //Navigate to Child Frame from Parent Frame inside Body
         cy.wrap(iframeBody).find('#iframe1').then($iframe => {
         const childframeBody = $iframe.contents().find('body');
         cy.wait(3000);
+        cy.screenshot('Child_Frame_Clicked.png', { capture: 'viewport' });
 
         //Perform the Click Action from Child Frame inside Body
-        cy.wrap(childframeBody).find('button').contains('Click Here').click(); 
+        cy.wrap(childframeBody).find('button').contains('Click Here').click();
+        cy.screenshot('Child_Frame_Button Clicked.png', { capture: 'viewport' });
+        cy.addTestContext('Child Frame Button Clicked'); 
         });
         });
         });
