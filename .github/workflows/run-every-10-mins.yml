@@ -62,19 +62,33 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Xvfb
+        run: sudo apt-get update && sudo apt-get install -y xvfb
+
       - name: Start Xvfb for headed mode
         run: |
-          export DISPLAY=':99.0'
-          Xvfb :99 -screen 0 1920x1080x24 > /dev/null 2>&1 &
+          export DISPLAY=:99.0
+          nohup Xvfb :99 -screen 0 1920x1080x24 &
+          echo "Xvfb started"
 
-      - name: Run specific Cypress test in headed mode and generate reports
-        uses: cypress-io/github-action@v5
+      - name: Run Cypress test in headed Electron mode
+        run: |
+          export DISPLAY=:99.0
+          npx cypress run --spec "cypress/e2e/Nested_Frames_Handling.cy.js" --browser electron --headed
+
+      - name: Upload screenshots if failed
+        if: failure()
+        uses: actions/upload-artifact@v3
         with:
-          install-command: npm ci
-          browser: chrome
-          headed: true
-          spec: cypress/e2e/Nested_Frames_Handling.cy.js
-          config: video=true,screenshotsFolder=cypress/screenshots,videoFolder=cypress/videos
+          name: cypress-screenshots
+          path: cypress/screenshots
 
-
-      
+      - name: Upload videos if failed
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: cypress-videos
+          path: cypress/videos
