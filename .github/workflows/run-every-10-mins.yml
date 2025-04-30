@@ -22,13 +22,38 @@
 #           spec: cypress/e2e/Nested_Frames_Handling.cy.js
 
 
+# name: Run Cypress Test Every 10 Minutes
+
+# on:
+#   schedule:
+#     - cron: '*/10 * * * *'  # Runs every 10 minutes
+#   workflow_dispatch:         # Manual trigger
+
+# jobs:
+#   cypress-run:
+#     runs-on: ubuntu-latest
+
+#     steps:
+#       - name: Checkout repository
+#         uses: actions/checkout@v3
+
+#       - name: Run specific Cypress test in headed mode and generate reports
+#         uses: cypress-io/github-action@v5
+#         with:
+#           install-command: npm ci
+#           browser: electron
+#           headed: true
+#           spec: cypress/e2e/Nested_Frames_Handling.cy.js
+#           config: video=true,screenshotsFolder=cypress/screenshots,videoFolder=cypress/videos
+#           wait-on-timeout: 60
+
 name: Run Cypress Test Every 10 Minutes
 
 on:
   schedule:
     - cron: '*/10 * * * *'  # Runs every 10 minutes
-  workflow_dispatch:         # Manual trigger
-
+  workflow_dispatch:
+    
 jobs:
   cypress-run:
     runs-on: ubuntu-latest
@@ -36,6 +61,11 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+
+      - name: Start Xvfb for headed mode
+        run: |
+          export DISPLAY=':99.0'
+          Xvfb :99 -screen 0 1920x1080x24 > /dev/null 2>&1 &
 
       - name: Run specific Cypress test in headed mode and generate reports
         uses: cypress-io/github-action@v5
@@ -45,6 +75,6 @@ jobs:
           headed: true
           spec: cypress/e2e/Nested_Frames_Handling.cy.js
           config: video=true,screenshotsFolder=cypress/screenshots,videoFolder=cypress/videos
-          wait-on-timeout: 60
+
 
       
