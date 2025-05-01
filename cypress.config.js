@@ -110,8 +110,6 @@
 //     }
 //   }
 // });
-require('cypress-mochawesome-reporter/plugin')(on);
-
 const { defineConfig } = require("cypress");
 const sqlite3 = require('sqlite3').verbose();
 
@@ -127,7 +125,6 @@ module.exports = defineConfig({
   screenshotsFolder: "cypress/screenshots",
   videosFolder: "cypress/videos",
 
-  // ✅ Updated Reporter to embed screenshots/videos in HTML
   reporter: 'cypress-mochawesome-reporter',
   reporterOptions: {
     reportDir: 'cypress/reports',
@@ -135,9 +132,9 @@ module.exports = defineConfig({
     html: true,
     json: true,
     charts: true,
-    reportTitle: "Cypress Test Report",
-    embeddedScreenshots: true,
-    inlineAssets: true
+    embeddedScreenshots: true, // ✅ Embed screenshots in HTML report
+    inlineAssets: true,        // ✅ Inline all JS/CSS for self-contained HTML
+    reportTitle: "Cypress Test Report"
   },
 
   e2e: {
@@ -147,16 +144,16 @@ module.exports = defineConfig({
       parentUrl: '/multiple-browser-windows/',
     },
     setupNodeEvents(on, config) {
-      // ✅ Register cypress-mochawesome-reporter plugin
+      // ✅ Register mochawesome reporter plugin
       require('cypress-mochawesome-reporter/plugin')(on);
 
-      // ✅ Custom DB task
+      // ✅ Register custom DB task
       on('task', {
         queryDatabase(query) {
           return new Promise((resolve, reject) => {
             const dbPath = "C:/Users/Admin/AppData/Roaming/DBeaverData/workspace6/.metadata/sample-database-sqlite-1/Chinook.db";
 
-            let db = new sqlite3.Database(dbPath, sqlite3.OPEN_READONLY, (err) => {
+            const db = new sqlite3.Database(dbPath, sqlite3.OPEN_READONLY, (err) => {
               if (err) {
                 console.error(err.message);
                 reject(err);
