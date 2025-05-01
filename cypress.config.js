@@ -110,7 +110,7 @@
 //     }
 //   }
 // });
-
+require('cypress-mochawesome-reporter/plugin')(on);
 
 const { defineConfig } = require("cypress");
 const sqlite3 = require('sqlite3').verbose();

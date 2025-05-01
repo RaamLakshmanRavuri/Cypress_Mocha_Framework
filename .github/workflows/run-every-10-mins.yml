@@ -129,6 +129,10 @@ jobs:
 
       - name: Install dependencies
         run: npm install
+        
+      - name: Install Mochawesome Reporter
+        run: npm install --save-dev cypress-mochawesome-reporter
+      
 
       - name: Run Cypress Tests
         run: |
