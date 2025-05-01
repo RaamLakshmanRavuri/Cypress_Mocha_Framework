@@ -91,9 +91,10 @@ jobs:
         run: |
           npx cypress run \
             --spec cypress/e2e/Nested_Frames_Handling.cy.js \
+            --browser electron \
+            --headed \
             --reporter mochawesome \
-            --reporter-options reportDir=cypress/reports,overwrite=false,html=true,json=true \
-            --verbose
+            --reporter-options reportDir=cypress/reports,overwrite=false,html=true,json=true
 
       - name: Check folder structure
         run: ls -R cypress/reports
@@ -109,4 +110,3 @@ jobs:
         with:
           name: cypress-videos
           path: cypress/videos/
-
