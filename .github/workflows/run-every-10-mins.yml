@@ -69,12 +69,55 @@
 #           path: cypress/videos/
 
 
+# name: Run Cypress Test Every 10 Minutes
+
+# on:
+#   schedule:
+#     - cron: '*/10 * * * *'  # Runs every 10 minutes
+#   workflow_dispatch:         # Manual trigger
+
+# jobs:
+#   cypress-run:
+#     runs-on: ubuntu-latest
+
+#     steps:
+#       - name: Checkout repository
+#         uses: actions/checkout@v3
+
+#       - name: Install dependencies
+#         run: npm install
+
+#       - name: Run Cypress tests and generate Mochawesome report
+#         run: |
+#           npx cypress run \
+#             --spec cypress/e2e/Nested_Frames_Handling.cy.js \
+#             --browser electron \
+#             --headed \
+#             --reporter mochawesome \
+#             --reporter-options reportDir=cypress/reports,overwrite=false,html=true,json=true
+
+#       - name: Check folder structure
+#         run: ls -R cypress/reports
+
+#       - name: Upload Mochawesome Report
+#         uses: actions/upload-artifact@v4
+#         with:
+#           name: mochawesome-report
+#           path: cypress/reports/
+
+#       - name: Upload Cypress Videos
+#         uses: actions/upload-artifact@v4
+#         with:
+#           name: cypress-videos
+#           path: cypress/videos/
+
+
 name: Run Cypress Test Every 10 Minutes
 
 on:
   schedule:
-    - cron: '*/10 * * * *'  # Runs every 10 minutes
-  workflow_dispatch:         # Manual trigger
+    - cron: '*/10 * * * *'
+  workflow_dispatch:
 
 jobs:
   cypress-run:
@@ -87,22 +130,27 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Run Cypress tests and generate Mochawesome report
+      - name: Run Cypress Tests
         run: |
           npx cypress run \
             --spec cypress/e2e/Nested_Frames_Handling.cy.js \
             --browser electron \
             --headed \
             --reporter mochawesome \
-            --reporter-options reportDir=cypress/reports,overwrite=false,html=true,json=true
+            --reporter-options reportDir=cypress/reports,overwrite=false,html=false,json=true
 
-      - name: Check folder structure
-        run: ls -R cypress/reports
+      - name: Merge Mochawesome JSON
+        run: |
+          npx mochawesome-merge cypress/reports/*.json > mochawesome.json
 
-      - name: Upload Mochawesome Report
+      - name: Generate Final HTML Report (with screenshots & videos)
+        run: |
+          npx marge mochawesome.json --reportDir=cypress/reports --inline
+
+      - name: Upload HTML Report
         uses: actions/upload-artifact@v4
         with:
-          name: mochawesome-report
+          name: mochawesome-html-report
           path: cypress/reports/
 
       - name: Upload Cypress Videos
@@ -110,3 +158,9 @@ jobs:
         with:
           name: cypress-videos
           path: cypress/videos/
+
+      - name: Upload Cypress Screenshots
+        uses: actions/upload-artifact@v4
+        with:
+          name: cypress-screenshots
+          path: cypress/screenshots/
