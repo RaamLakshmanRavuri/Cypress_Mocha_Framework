@@ -116,8 +116,8 @@ name: Run Cypress Test Every 10 Minutes
 
 on:
   schedule:
-    - cron: '*/10 * * * *'
-  workflow_dispatch:
+    - cron: '*/10 * * * *'  # Runs every 10 minutes
+  workflow_dispatch:         # Manual trigger
 
 jobs:
   cypress-run:
@@ -135,19 +135,9 @@ jobs:
           npx cypress run \
             --spec cypress/e2e/Nested_Frames_Handling.cy.js \
             --browser electron \
-            --headed \
-            --reporter mochawesome \
-            --reporter-options reportDir=cypress/reports,overwrite=false,html=false,json=true
+            --headed
 
-      - name: Merge Mochawesome JSON
-        run: |
-          npx mochawesome-merge cypress/reports/*.json > mochawesome.json
-
-      - name: Generate Final HTML Report (with screenshots & videos)
-        run: |
-          npx marge mochawesome.json --reportDir=cypress/reports --inline
-
-      - name: Upload HTML Report
+      - name: Upload Mochawesome HTML Report
         uses: actions/upload-artifact@v4
         with:
           name: mochawesome-html-report
