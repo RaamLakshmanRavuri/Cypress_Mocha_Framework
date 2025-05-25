@@ -1,5 +1,8 @@
 # Ignore node_modules directory
 node_modules/
+cypress/screenshots/
+cypress.env.json
+cypress/videos
 
 # Ignore environment variables
 .env

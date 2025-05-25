@@ -1,0 +1,164 @@
+
+# name: Run Cypress Test Every 10 Minutes
+
+# on:
+#   schedule:
+#     - cron: '*/10 * * * *'  # Runs every 10 minutes
+#   workflow_dispatch:         # Manual trigger
+
+# jobs:
+#   cypress-run:
+#     runs-on: ubuntu-latest
+
+#     steps:
+#       - name: Checkout repository
+#         uses: actions/checkout@v3
+
+#       - name: Install dependencies
+#         run: npm install
+
+#       - name: Run specific Cypress test in headed mode and generate reports
+#         uses: cypress-io/github-action@v5
+#         with:
+#           install-command: npm ci
+#           browser: electron
+#           headed: true
+#           spec: cypress/e2e/Nested_Frames_Handling.cy.js
+#           config: video=true,screenshotsFolder=cypress/screenshots,videoFolder=cypress/videos
+#           wait-on-timeout: 60
+
+
+# name: Run Cypress Test Every 10 Minutes
+
+# on:
+#   schedule:
+#     - cron: '*/10 * * * *'  # Runs every 10 minutes
+#   workflow_dispatch:         # Manual trigger
+
+# jobs:
+#   cypress-run:
+#     runs-on: ubuntu-latest
+
+#     steps:
+#       - name: Checkout repository
+#         uses: actions/checkout@v3
+
+#       - name: Install dependencies
+#         run: npm install
+
+#       - name: Run specific Cypress test in headed mode and generate reports
+#         uses: cypress-io/github-action@v5
+#         with:
+#           install-command: npm ci
+#           browser: electron
+#           headed: true
+#           spec: cypress/e2e/Nested_Frames_Handling.cy.js
+#           config: video=true,screenshotsFolder=cypress/screenshots,videoFolder=cypress/videos
+#           wait-on-timeout: 60
+
+#       - name: Upload Mochawesome Report
+#         uses: actions/upload-artifact@v4
+#         with:
+#           name: mochawesome-report
+#           path: cypress/reports/mochawesome.html
+
+#       - name: Upload Cypress Videos
+#         uses: actions/upload-artifact@v4
+#         with:
+#           name: cypress-videos
+#           path: cypress/videos/
+
+
+# name: Run Cypress Test Every 10 Minutes
+
+# on:
+#   schedule:
+#     - cron: '*/10 * * * *'  # Runs every 10 minutes
+#   workflow_dispatch:         # Manual trigger
+
+# jobs:
+#   cypress-run:
+#     runs-on: ubuntu-latest
+
+#     steps:
+#       - name: Checkout repository
+#         uses: actions/checkout@v3
+
+#       - name: Install dependencies
+#         run: npm install
+
+#       - name: Run Cypress tests and generate Mochawesome report
+#         run: |
+#           npx cypress run \
+#             --spec cypress/e2e/Nested_Frames_Handling.cy.js \
+#             --browser electron \
+#             --headed \
+#             --reporter mochawesome \
+#             --reporter-options reportDir=cypress/reports,overwrite=false,html=true,json=true
+
+#       - name: Check folder structure
+#         run: ls -R cypress/reports
+
+#       - name: Upload Mochawesome Report
+#         uses: actions/upload-artifact@v4
+#         with:
+#           name: mochawesome-report
+#           path: cypress/reports/
+
+#       - name: Upload Cypress Videos
+#         uses: actions/upload-artifact@v4
+#         with:
+#           name: cypress-videos
+#           path: cypress/videos/
+
+
+name: Run Cypress Test ORM HRM Login
+
+on:
+  schedule:
+    - cron: '*/10 * * * *'  # Runs every 10 minutes
+  workflow_dispatch:         # Manual trigger
+
+jobs:
+  cypress-run:
+    runs-on: ubuntu-latest
+
+    env:
+      CYPRESS_ORM_USERNAME: ${{ secrets.ORM_USERNAME }}
+      CYPRESS_ORM_PASSWORD: ${{ secrets.ORM_PASSWORD }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: npm install
+        
+      - name: Install Mochawesome Reporter
+        run: npm install --save-dev cypress-mochawesome-reporter
+      
+
+      - name: Run Cypress Tests
+        run: |
+          npx cypress run \
+            --spec cypress\e2e\LoginTest.cy.js \
+            --browser electron \
+            --headed
+
+      - name: Upload Mochawesome HTML Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: mochawesome-html-report
+          path: cypress/reports/
+
+      - name: Upload Cypress Videos
+        uses: actions/upload-artifact@v4
+        with:
+          name: cypress-videos
+          path: cypress/videos/
+
+      - name: Upload Cypress Screenshots
+        uses: actions/upload-artifact@v4
+        with:
+          name: cypress-screenshots
+          path: cypress/screenshots/
